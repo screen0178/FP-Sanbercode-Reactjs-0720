@@ -1,10 +1,14 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Layout, Menu, Row, Col, Dropdown, Button} from 'antd'
 import logo from './img/logo.png'
 import { DownOutlined } from '@ant-design/icons';
+
+import {AppContext} from './AppContext'
+
 const {Header} = Layout
 
 const Navi = () => {
+    const [, ,loginState ,] = useContext(AppContext)
     const menu = (
         <Menu>
             <Menu.Item>
@@ -23,19 +27,23 @@ const Navi = () => {
                     <Col flex="200px">
                         <img id="logo" src={logo} width="200px" alt="logoSanber" />                
                     </Col>
-                    <Col flex="auto">
-                        <Menu theme="dark" mode="horizontal" SelectedKeys={['2']}>
-                            <Menu.Item key="1">Home</Menu.Item>
-                            <Menu.Item key="2" style={{float:'right'}}>Login</Menu.Item>
-                        </Menu>
-                    </Col>
-                    <Col>
-                        <Dropdown overlay={menu}>
-                            <Button>
-                                Button <DownOutlined />
-                            </Button>
-                        </Dropdown>              
-                    </Col>
+                        <Col flex="auto">
+                            <Menu theme="dark" mode="horizontal" SelectedKeys={['2']}>
+                                <Menu.Item key="1">Home</Menu.Item>
+                                {loginState === false &&
+                                <Menu.Item key="2" style={{float:'right'}}>Login</Menu.Item>
+                                }
+                            </Menu>
+                        </Col>
+                    {loginState === true &&
+                        <Col flex="auto">
+                            <Dropdown overlay={menu}>
+                                <Button>
+                                    Button <DownOutlined />
+                                </Button>
+                            </Dropdown>              
+                        </Col>
+                    }
                 </Row>
             </Header>
         </>

@@ -16,3 +16,11 @@
 .login-form-button {
   width: 100%;
 }
+
+.ant-dropdown-button {
+  margin: 0 8px 8px 0;
+}
+
+.ant-btn-group-rtl.ant-dropdown-button {
+  margin: 0 0 8px 8px;
+}

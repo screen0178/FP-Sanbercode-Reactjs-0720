@@ -6,8 +6,8 @@ import Axios from 'axios'
 
 const {Content} = Layout
 
-const Login = () => {
-    const [users, setUsers, , setLoginState] = useContext(AppContext)
+const Signup = () => {
+    const [users, setUsers, , ] = useContext(AppContext)
     const [inpName, setInpName] = useState("")
     const [inpPass, setInpPass] = useState("")
 
@@ -34,37 +34,45 @@ const Login = () => {
 
     const handleSubmit = (evt) => {
         evt.preventDefault()
-        let name = inpName
-        let pass = inpPass
-        const validation = users.some(el => el.username === name && el.password === pass)
+        let username = inpName
+        let password = inpPass
+        const validation = users.some(el => el.username === username)
         if (validation === true) {
-            setLoginState(true)
-        } else {
-            setLoginState(false)
             notification.open({
                 message: 'Error',
                 description:
-                  'Username dan Password anda mungkin salah atau tidak terdaftar.',
+                  'Username sudah terdaftar silahkan gunakan username lain.',
               })
+        } else {
+            Axios.post(`https://backendexample.sanbersy.com/api/users`, {username, password})
+            .then(res => {
+                setUsers([
+                    ...users,
+                    {
+                        username: res.data.username,
+                        password: res.data.password
+                    }
+                ])
+                console.log(res)
+            })
         }
     }
 
     return (
         <Content style={{padding: '50px 50px 20px'}}>
             <div className="site-layout-content">
-                <h1 style={{textAlign:'center'}}>LOGIN</h1>
+                <h1 style={{textAlign:'center'}}>Sign Up</h1>
                 <Form style={{margin: '10px auto'}} name="normal_login" className="login-form">
-                    <Form.Item  name="inpName"  rules={[{ required: true, message: 'Please input your Username!' }]}>
+                    <Form.Item  name="inpName"  rules={[{ required: true, message: 'Create your Username!' }]}>
                         <Input onChange={handleChangeName} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
                     </Form.Item>
-                    <Form.Item  name="inpPass"  rules={[{ required: true, message: 'Please input your Password!' }]}>
+                    <Form.Item  name="inpPass"  rules={[{ required: true, message: 'Create your Password!' }]}>
                         <Input onChange={handleChangePass}  prefix={<LockOutlined className="site-form-item-icon" />}  type="password"  placeholder="Password"/>
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="login-form-button" onClick={handleSubmit}>
-                            Log in
+                            Register
                         </Button>
-                        Or <a href="/">register now!</a>
                     </Form.Item>
                 </Form>
             </div>
@@ -72,4 +80,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Signup
