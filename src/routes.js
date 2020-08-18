@@ -5,6 +5,7 @@ import Signup from './component/Signup'
 import Login from './component/Login'
 import MovieList from './component/MovieList'
 import GameList from './component/GameList'
+import Admin from './component/Admin'
 
 const Routes = () => {
     return (
@@ -14,6 +15,9 @@ const Routes = () => {
             </Route>
             <Route path="/signup">
                 <Signup />
+            </Route>
+            <Route path="/admin">
+                <Admin />
             </Route>
             <Route path="/games">
                 <GameList />

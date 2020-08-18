@@ -11,15 +11,17 @@ const {Header} = Layout
 const Navi = () => {
     const [, ,loginState ,setLoginState] = useContext(AppContext)
     const history = useHistory()
+
     const handleLogout = evt => {
         evt.preventDefault()
         setLoginState(false)
         history.push("/login")
     }
+
     const menu = (
         <Menu>
             <Menu.Item>
-                <Button type="text"><Link className="link" to="/signup">ADMIN</Link></Button>
+                <Button type="text"><Link className="link" to="/admin">ADMIN</Link></Button>
             </Menu.Item>
             <Menu.Item>
                 <Button type="text" onClick={handleLogout}>Logout</Button>

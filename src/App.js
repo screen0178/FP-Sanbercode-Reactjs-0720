@@ -7,6 +7,7 @@ import {Layout} from 'antd'
 import Navi from './component/Navi'
 import {AppProvider} from './component/AppContext'
 
+
 const {Footer} = Layout
 
 function Footerr() {
