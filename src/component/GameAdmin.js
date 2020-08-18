@@ -55,7 +55,6 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel }) => {
     )
 }
 
-
 const MovieTable = () => {
     const [
       , ,
@@ -204,7 +203,31 @@ const MovieEdit = () => {
     editId, setEditId,
     isEdit, setIsEdit
   ] = useContext(AppContext)
+  const [currentData, setCurrentData] = useState(null)
+  const [inpName, setInpName] = useState("")
+  const [inpGenre, setInpGenre] = useState("")
+  const [inpSinglePlayer, setInpSinglePlayer] = useState("")
+  const [inpMultiPlayer, setInpMultiPlayer] = useState("")
+  const [inpPlatform, setInpPlatform] = useState("")
+  const [inpRelease, setRelease] = useState("")
+  const [inpImage_URL, setInpImage_URL] = useState("")
   const history = useHistory()
+
+  useEffect(() => {
+    if (currentData === null) {
+      Axios.get(`https://backendexample.sanbersy.com/api/games/${editId}`)
+      .then(res => {
+        setCurrentData(res.data)
+        setInpName(res.data.name)
+        setInpGenre(res.data.genre)
+        setInpSinglePlayer(res.data.singlePlayer)
+        setInpMultiPlayer(res.data.multiplayer)
+        setInpPlatform(res.data.platform)
+        setRelease(res.data.release)
+        setInpImage_URL(res.data.image_url)
+      })
+    }
+  })
 
   const cancelEdit = (evt) => {
     setIsEdit(false)
@@ -212,46 +235,76 @@ const MovieEdit = () => {
     history.push("/admin")
   }
 
-  const handleSubmit = (evt) => {
-    
+  const handleChangeName = evt => {
+    setInpName(evt.target.value)
+  }
+  const handleChangeGenre = evt => {
+    setInpGenre(evt.target.value)
+  }
+  const handleChangeSingle = evt => {
+    setInpSinglePlayer(evt.target.value)
+  }
+  const handleChangeMulti = evt => {
+    setInpMultiPlayer(evt.target.value)
+  }
+  const handleChangePlatform = evt => {
+    setInpPlatform(evt.targe.value)
+  }
+  const handleChangeRelease = evt => {
+    setRelease(evt.target.value)
+  }
+  const handleChangeImage = (evt) => {
+    setInpImage_URL(evt.target.value)
+  }
 
+  const handleSubmit = (evt) => {
+    evt.preventDefault()
+    let currentdate = new Date()
+
+    let name = inpName
+    let genre = inpGenre
+    let singlePlayer = inpSinglePlayer
+    let multiplayer  = inpMultiPlayer
+    let platform = inpPlatform
+    let release = inpRelease
+    let image_url = inpImage_URL
+    let updated_at = currentdate.getDate() + "-"
+    + (currentdate.getMonth()+1)  + "-" 
+    + currentdate.getFullYear() + " "  
+    + currentdate.getHours() + ":"  
+    + currentdate.getMinutes() + ":" 
+    + currentdate.getSeconds()
+    let created_at = currentData.created_at
+
+    Axios.put(`https://backendexample.sanbersy.com/api/games/${editId}`,{name, genre, singlePlayer, multiplayer,platform, release, image_url, created_at, updated_at})
+    .then(res => {
+      console.log(res)
+    })
+    setIsEdit(false)
   }
 
   return (
-    <Form  layout="vertical" name="form_in_modal">
-      <Form.Item name="title" label="Title" rules={[{required: true,message: 'Please input the Movie Title!',},]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="year" label="Year" rules={[{required: true,message: 'Please input the Year!',},]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="rating" label="Rating" rules={[{required: true,message: 'Please input the Rating!',},]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="duration" label="Duration" rules={[{required: true,message: 'Please input the Duration!',},]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="genre" label="Genre" rules={[{required: true,message: 'Please input the Genre!',},]}>
-        <Input />
-      </Form.Item> 
-      <Form.Item name="description" label="Dscription" rules={[{required: true,message: 'Please input the Description!',},]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="review" label="Review" rules={[{required: true,message: 'Please input the Review!',},]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="image_url" label="Image_URL" rules={[{required: true,message: 'Please input the url of movie poster!',},]}>
-        <Input />
-      </Form.Item>
-      <Form.Item>
-          <Button type="default" className="login-form-button" onClick={cancelEdit}>
-              Cancel
-          </Button>
-          <Button type="primary" style={{marginTop: '10px'}} htmlType="submit" className="login-form-button" onClick={handleSubmit}>
-              Submit
-          </Button>
-      </Form.Item>
-    </Form>
+    <div>
+      <Title>Game Edit</Title>
+      <form>
+        <label>Name : </label>
+        <input type="text" name="inpName" onChange={handleChangeName} value={inpName} />
+        <label>Genre : </label>
+        <input type="text" name="inpGenre" onChange={handleChangeGenre} value={inpGenre} />
+        <label>Single Player : </label>
+        <input type="text" name="inpSinglePlayer" onChange={handleChangeSingle} value={inpSinglePlayer} />
+        <label>Multi Player : </label>
+        <input type="text" name="inpMultiPlayer" onChange={handleChangeMulti} value={inpMultiPlayer} />
+        <label>Platform : </label>
+        <input type="text" name="inpPlatform" onChange={handleChangePlatform} value={inpPlatform} />
+        <label>Release : </label>
+        <input type="text" name="inpRelease" onChange={handleChangeRelease} value={inpRelease} />
+        <label>Image_URL : </label>
+        <input type="text" name="inpImage_URL" onChange={handleChangeImage} value={inpImage_URL} />
+        <input type="submit" onClick={cancelEdit} value="Cancel"/>
+        <input type="submit" onClick={handleSubmit} value="Submit" />
+      </form>
+    </div>
   )
 }
 

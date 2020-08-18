@@ -1,4 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react'
+import {useHistory} from 'react-router'
 import {AppContext} from './AppContext'
 import {Form, Input, Button, Layout, notification, Row, Col} from 'antd'
 import {UserOutlined, LockOutlined} from '@ant-design/icons'
@@ -7,10 +8,10 @@ import Axios from 'axios'
 const {Content} = Layout
 
 const Signup = () => {
-    const [users, setUsers, , ] = useContext(AppContext)
+    const [users, setUsers, ,setLoginState ] = useContext(AppContext)
     const [inpName, setInpName] = useState("")
     const [inpPass, setInpPass] = useState("")
-
+    const history = useHistory()
     useEffect(() => {
         if (users === null) {
             Axios.get(`https://backendexample.sanbersy.com/api/users`)
@@ -55,6 +56,8 @@ const Signup = () => {
                     }
                 ])
                 console.log(res)
+                setLoginState(true)
+                history.push("/")
             })
         }
     }
